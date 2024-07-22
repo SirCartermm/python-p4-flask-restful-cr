@@ -2,7 +2,7 @@
 
 from flask import Flask, request, make_response
 from flask_migrate import Migrate
-from flask_restful import Api, Resource
+from flask_restful import Api, Resource # type: ignore
 
 from models import db, Newsletter
 
@@ -36,3 +36,20 @@ api.add_resource(Home, '/')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
+
+
+
+class Newsletters(Resource):
+
+    def get(self):
+
+        response_dict_list = [n.to_dict() for n in Newsletter.query.all()]
+
+        response = make_response(
+            response_dict_list,
+            200,
+        )
+
+        return response
+
+api.add_resource(Newsletters, '/newsletters')
